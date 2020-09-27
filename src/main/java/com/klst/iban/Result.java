@@ -340,6 +340,7 @@ public class Result {
         protected String city;
         @XmlElement(required = true)
         protected Object state;
+        protected String zipString;
         protected int zip;
         @XmlElement(required = true)
         protected Object phone;
@@ -356,8 +357,12 @@ public class Result {
         protected int account;
         @XmlElement(name = "bank_code")
         protected int bankCode;
+        protected String bankIdentifier; // nicht alle bankCode's sind numerisch, Bsp. BG
+        
         @XmlElement(name = "branch_code", required = true)
         protected Object branchCode;
+        
+        protected byte bankSupports;
 
         /**
          * Gets the value of the bic property.
@@ -503,6 +508,20 @@ public class Result {
             this.state = value;
         }
 
+        public String getZipString() {
+            return zipString;
+        }
+        
+        public void setZipString(String value) {
+            this.zipString = value;
+            try {
+            	setZip(Integer.parseInt(value));
+            } catch (NumberFormatException e) {
+//            	LOG.info("Zip "+value " is not numeric.");
+            }
+
+        }
+        
         /**
          * Gets the value of the zip property.
          * 
@@ -695,6 +714,18 @@ public class Result {
             this.bankCode = value;
         }
 
+        public String getBankIdentifier() {
+            return bankIdentifier;
+        }
+        public void setBankIdentifier(String value) {
+            this.bankIdentifier = value;
+            try {
+            	setBankCode(Integer.parseInt(value));
+            } catch (NumberFormatException e) {
+//            	LOG.info("BankIdentifier "+value " is not numeric.");
+            }        
+        }
+
         /**
          * Gets the value of the branchCode property.
          * 
@@ -718,6 +749,33 @@ public class Result {
         public void setBranchCode(Object value) {
             this.branchCode = value;
         }
+        
+        public byte getBankSupports() {
+            return bankSupports;
+        }
+        
+    	public void setBankSupports(byte bankSupports) {
+    		this.bankSupports = bankSupports;
+    	}
+
+        public String toString() {
+    		StringBuffer sb = new StringBuffer("[CountryIso:").append(this.getCountryIso())
+    				.append(", Bic:").append(this.getBic())
+    				.append(", BankCode:").append(getBankCode()==0 ? getBankIdentifier() : getBankCode())
+//    				.append(", BankIdentifier:").append(this.getBankIdentifier())
+    				.append(", BranchCode:").append(this.getBranchCode());
+    		if(getBranch()!=null) sb.append(", Branch:\"").append(getBranch()).append("\"");	
+    		if(getBank()!=null) sb.append(", Name:\"").append(getBank()).append("\""); // BankName		
+    		if(getAddress()!=null) sb.append(", Address:\"").append(getAddress()).append("\"");	
+    		if(getBankSupports()>0) sb.append(", BankSupports:").append(getBankSupports());	
+    		if(getZipString()!=null) sb.append(", Zip:\"").append(getZipString()).append("\"");		
+    		if(getCity()!=null) sb.append(", City:\"").append(getCity()).append("\"");		
+    		if(getAccount()>0) sb.append(", Account:").append(getAccount());
+    		sb.append ("]");
+    		return sb.toString ();
+
+        }
+        
 
     }
 
@@ -741,6 +799,14 @@ public class Result {
      *     &lt;/restriction>
      *   &lt;/complexContent>
      * &lt;/complexType>
+     * 
+
+SCT 	Max 3 	String 	Whether this bank supports SEPA Credit Transfer.      Überweisungen
+SDD 	Max 3 	String 	Whether this bank supports SEPA Direct Debit.         Lastschrift 
+COR1 	Max 3 	String 	Whether this bank supports SEPA COR1.                 Eillastschrift  
+B2B 	Max 3 	String 	Whether this bank supports SEPA Business to Business. Firmenlastschrift 
+SCC 	Max 3 	String 	Whether this bank supports SEPA Card Clearing.
+
      * </pre>
      * 
      * 
@@ -754,7 +820,25 @@ public class Result {
         "scc"
     })
     public static class SepaData {
-
+    	
+    	public static final byte SCT = 0b00000001;
+    	public static final byte SDD = 0b00000010;
+    	public static final byte COR1= 0b00000100;
+    	public static final byte B2B = 0b00001000;
+    	public static final byte SCC = 0b00010000;
+    	
+    	static final String YES = "YES";
+    	
+    	public byte getBankSupports() {
+    		int bankSupports = 0;
+    		if(YES.equals(getSCT())) bankSupports = bankSupports | SCT;
+    		if(YES.equals(getSDD())) bankSupports = bankSupports | SDD;
+    		if(YES.equals(getCOR1())) bankSupports = bankSupports | COR1;
+    		if(YES.equals(getB2B())) bankSupports = bankSupports | B2B;
+    		if(YES.equals(getSCC())) bankSupports = bankSupports | SCC;
+    		return (byte)bankSupports;
+    	}
+    	
         @XmlElement(name = "SCT", required = true)
         protected String sct;
         @XmlElement(name = "SDD", required = true)
