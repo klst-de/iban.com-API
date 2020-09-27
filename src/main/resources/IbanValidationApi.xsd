@@ -1,10 +1,10 @@
 <!--?xml version="1.0" encoding="UTF-8"?-->
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementformdefault="qualified" attributeformdefault="unqualified">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
 <xs:element name="result">
-<xs:complextype>
+<xs:complexType>
      <xs:sequence>
            <xs:element name="bank_data">
-                 <xs:complextype>
+                 <xs:complexType>
                        <xs:sequence>
                              <xs:element name="bic" type="xs:string"></xs:element>
                              <xs:element name="branch"></xs:element>
@@ -23,10 +23,10 @@
                              <xs:element name="bank_code" type="xs:int"></xs:element>
                              <xs:element name="branch_code"></xs:element>
                        </xs:sequence>
-                 </xs:complextype>
+                 </xs:complexType>
            </xs:element>
            <xs:element name="sepa_data">
-                 <xs:complextype>
+                 <xs:complexType>
                        <xs:sequence>
                              <xs:element name="SCT" type="xs:string"></xs:element>
                              <xs:element name="SDD" type="xs:string"></xs:element>
@@ -34,64 +34,64 @@
                              <xs:element name="B2B" type="xs:string"></xs:element>
                              <xs:element name="SCC" type="xs:string"></xs:element>
                        </xs:sequence>
-                 </xs:complextype>
+                 </xs:complexType>
            </xs:element>
            <xs:element name="validations">
-                 <xs:complextype>
+                 <xs:complexType>
                        <xs:sequence>
                              <xs:element name="chars">
-                                   <xs:complextype>
+                                   <xs:complexType>
                                          <xs:sequence>
                                                <xs:element name="code" type="xs:int"></xs:element>
                                                <xs:element name="message" type="xs:string"></xs:element>
                                          </xs:sequence>
-                                   </xs:complextype>
+                                   </xs:complexType>
                              </xs:element>
                              <xs:element name="iban">
-                                   <xs:complextype>
+                                   <xs:complexType>
                                          <xs:sequence>
                                                <xs:element name="code" type="xs:int"></xs:element>
                                                <xs:element name="message" type="xs:string"></xs:element>
                                          </xs:sequence>
-                                   </xs:complextype>
+                                   </xs:complexType>
                              </xs:element>
                              <xs:element name="account">
-                                   <xs:complextype>
+                                   <xs:complexType>
                                          <xs:sequence>
                                                <xs:element name="code" type="xs:int"></xs:element>
                                                <xs:element name="message" type="xs:string"></xs:element>
                                          </xs:sequence>
-                                   </xs:complextype>
+                                   </xs:complexType>
                              </xs:element>
                              <xs:element name="structure">
-                                   <xs:complextype>
+                                   <xs:complexType>
                                          <xs:sequence>
                                                <xs:element name="code" type="xs:int"></xs:element>
                                                <xs:element name="message" type="xs:string"></xs:element>
                                          </xs:sequence>
-                                   </xs:complextype>
+                                   </xs:complexType>
                              </xs:element>
                              <xs:element name="length">
-                                   <xs:complextype>
+                                   <xs:complexType>
                                          <xs:sequence>
                                                <xs:element name="code" type="xs:int"></xs:element>
                                                <xs:element name="message" type="xs:string"></xs:element>
                                          </xs:sequence>
-                                   </xs:complextype>
+                                   </xs:complexType>
                              </xs:element>
                              <xs:element name="country_support">
-                                   <xs:complextype>
+                                   <xs:complexType>
                                          <xs:sequence>
                                                <xs:element name="code" type="xs:int"></xs:element>
                                                <xs:element name="message" type="xs:string"></xs:element>
                                          </xs:sequence>
-                                   </xs:complextype>
+                                   </xs:complexType>
                              </xs:element>
                        </xs:sequence>
-                 </xs:complextype>
+                 </xs:complexType>
            </xs:element>
            <xs:element name="errors"></xs:element>
      </xs:sequence>
-</xs:complextype>
+</xs:complexType>
 </xs:element>
 </xs:schema>
