@@ -39,8 +39,84 @@ public class TestGetBankData {
 	private static final String CR_IBAN = "CR05015202001026284066";
 	private static final String CY_IBAN = "CY17002001280000001200527600";
 	private static final String CZ_IBAN = "CZ6508000000192000145399";
-							
-	final static List<String> SEPA_COUNTRIES = Arrays.asList(AD_IBAN, AT_IBAN, BE_IBAN, BG_IBAN, CH_IBAN, CY_IBAN, CZ_IBAN);
+	private static final String DE_IBAN = "DE89370400440532013000";
+	private static final String DK_IBAN = "DK5000400440116243";
+	private static final String DO_IBAN = "DO28BAGR00000001212453611324";
+	private static final String EE_IBAN = "EE382200221020145685";
+	private static final String EG_IBAN = "EG380019000500000000263180002";
+	private static final String ES_IBAN = "ES9121000418450200051332";
+	private static final String FI_IBAN = "FI2112345600000785";
+	private static final String FO_IBAN = "FO6264600001631634";
+	private static final String FR_IBAN = "FR1420041010050500013M02606";
+	private static final String GB_IBAN = "GB29NWBK60161331926819";        // TODO
+	private static final String GE_IBAN = "GE29NB0000000101904917";
+	private static final String GI_IBAN = "GI75NWBK000000007099453";
+	private static final String GL_IBAN = "GL8964710001000206";
+	private static final String GR_IBAN = "GR1601101250000000012300695";
+	private static final String GT_IBAN = "GT82TRAJ01020000001210029690";
+	private static final String HR_IBAN = "HR1210010051863000160";
+	private static final String HU_IBAN = "HU42117730161111101800000000";
+	private static final String IE_IBAN = "IE29AIBK93115212345678";
+	private static final String IL_IBAN = "IL620108000000099999999";
+	private static final String IQ_IBAN = "IQ98NBIQ850123456789012";
+	private static final String IS_IBAN = "IS140159260076545510730339";
+	private static final String IT_IBAN = "IT60X0542811101000000123456";
+	private static final String JO_IBAN = "JO94CBJO0010000000000131000302";
+	private static final String KW_IBAN = "KW81CBKU0000000000001234560101";
+	private static final String KZ_IBAN = "KZ86125KZT5004100100";
+	private static final String LB_IBAN = "LB62099900000001001901229114";
+	private static final String LC_IBAN = "LC55HEMM000100010012001200023015";
+	private static final String LI_IBAN = "LI21088100002324013AA";
+	private static final String LT_IBAN = "LT407300010099679931"; // caritas.lt
+	private static final String LU_IBAN = "LU280019400644750000";
+	private static final String LV_IBAN = "LV46HABA0551008657797"; // caritas.lv
+	private static final String MC_IBAN = "MC5811222000010123456789030";         // TODO
+	private static final String MD_IBAN = "MD24AG000225100013104168";
+	private static final String ME_IBAN = "ME25505000012345678951";
+	private static final String MK_IBAN = "MK07250120000058984";
+	private static final String MR_IBAN = "MR1300020001010000123456753";
+	private static final String MT_IBAN = "MT84MALT011000012345MTLCAST001S";
+	private static final String MU_IBAN = "MU17BOMM0101101030300200000MUR";
+	private static final String NL_IBAN = "NL91ABNA0417164300";
+	private static final String NO_IBAN = "NO9386011117947";
+	private static final String PK_IBAN = "PK36SCBL0000001123456702";
+	private static final String PL_IBAN = "PL61109010140000071219812874";
+	private static final String PS_IBAN = "PS92PALS000000000400123456702";
+	private static final String PT_IBAN = "PT50003300000000539169561"; // caritas.pt
+												
+	final static List<String> SEPA_COUNTRIES = Arrays.asList
+			( AD_IBAN // in iban_registry_0.pdf kein SEPA!
+			, AT_IBAN
+			, BE_IBAN
+			, BG_IBAN
+			, CH_IBAN
+			, CY_IBAN
+			, CZ_IBAN
+			, DE_IBAN
+			, DK_IBAN
+			, EE_IBAN
+			, ES_IBAN
+			, FI_IBAN
+			, FR_IBAN // SEPA country also includes GF, GP, MQ, YT, RE, PM, BL, MF
+			, GB_IBAN // Country code includes other countries/territories IM, JE, GG
+			, GI_IBAN
+			, GR_IBAN
+			, HR_IBAN
+			, HU_IBAN
+			, IE_IBAN
+			, IS_IBAN
+			, IT_IBAN
+			, LI_IBAN
+			, LT_IBAN
+			, LU_IBAN
+			, LV_IBAN
+			, MC_IBAN
+			, MT_IBAN
+			, NL_IBAN
+			, NO_IBAN
+			, PL_IBAN
+			, PT_IBAN
+			);
 	
     @BeforeClass
     public static void staticSetup() {
@@ -92,15 +168,8 @@ public class TestGetBankData {
 		assertNotNull(bankData);
 		LOG.info("retrieveBankData:"+ bankData);
 		assertNotNull(bankData.getBic());
-
-		bankData = test.getBankData(AT_IBAN);
-		LOG.info("getBankData:"+ bankData);
-		bankData = test.retrieveBankData(AT_IBAN);
-		assertNotNull(bankData);
-		LOG.info("retrieveBankData:"+ bankData);
-		assertNotNull(bankData.getBic());
-		assertTrue((bankData.getBankSupports() & SepaData.SCT)>0); // bank supports SEPA Credit Transfer
-		// BankSupports:15 
+		
+		checkSepaIban(test, bankData, AT_IBAN); // BankSupports:15		
 		
 		bankData = test.retrieveBankData(AZ_IBAN);
 		assertNotNull(bankData);
@@ -112,23 +181,8 @@ public class TestGetBankData {
 		LOG.info("retrieveBankData:"+ bankData);
 		assertNotNull(bankData.getBic());
 
-		bankData = test.getBankData(BE_IBAN);
-		LOG.info("getBankData:"+ bankData);
-		bankData = test.retrieveBankData(BE_IBAN);
-		assertNotNull(bankData);
-		LOG.info("retrieveBankData:"+ bankData);
-		assertNotNull(bankData.getBic());
-		assertTrue((bankData.getBankSupports() & SepaData.SCT)>0); // bank supports SEPA Credit Transfer
-		// BankSupports:7 
-		
-		bankData = test.getBankData(BG_IBAN);
-		LOG.info("getBankData:"+ bankData);
-		bankData = test.retrieveBankData(BG_IBAN);
-		assertNotNull(bankData);
-		LOG.info("retrieveBankData:"+ bankData);
-		assertNotNull(bankData.getBic());
-		assertTrue((bankData.getBankSupports() & SepaData.SCT)>0); // bank supports SEPA Credit Transfer
-		// BankSupports:1
+		checkSepaIban(test, bankData, BE_IBAN); // BankSupports:7		
+		checkSepaIban(test, bankData, BG_IBAN); // BankSupports:1		
 
 		bankData = test.retrieveBankData(BH_IBAN);
 		assertNotNull(bankData);
@@ -145,37 +199,161 @@ public class TestGetBankData {
 		LOG.info("retrieveBankData:"+ bankData);
 		assertNotNull(bankData.getBic());
 
-		bankData = test.getBankData(CH_IBAN);
-		LOG.info("getBankData:"+ bankData);
-		bankData = test.retrieveBankData(CH_IBAN);
-		assertNotNull(bankData);
-		LOG.info("retrieveBankData:"+ bankData);
-		assertNotNull(bankData.getBic());
-		assertTrue((bankData.getBankSupports() & SepaData.SCT)>0); // bank supports SEPA Credit Transfer
-		// BankSupports:15
+		checkSepaIban(test, bankData, CH_IBAN); // BankSupports:15		
 		
 		bankData = test.retrieveBankData(CR_IBAN);
 		assertNotNull(bankData);
 		LOG.info("retrieveBankData:"+ bankData);
 		assertNotNull(bankData.getBic());
 
-		bankData = test.getBankData(CY_IBAN);
-		LOG.info("getBankData:"+ bankData);
-		bankData = test.retrieveBankData(CY_IBAN);
-		assertNotNull(bankData);
-		LOG.info("retrieveBankData:"+ bankData);
-		assertNotNull(bankData.getBic());
-		assertTrue((bankData.getBankSupports() & SepaData.SCT)>0); // bank supports SEPA Credit Transfer
-		// BankSupports:7
+		checkSepaIban(test, bankData, CY_IBAN); // BankSupports:7		
+		checkSepaIban(test, bankData, CZ_IBAN); // BankSupports:15
+		checkSepaIban(test, bankData, DE_IBAN); // BankSupports:31
+		checkSepaIban(test, bankData, DK_IBAN); // BankSupports:1
 		
-		bankData = test.getBankData(CZ_IBAN);
+		bankData = test.retrieveBankData(DO_IBAN);
+		assertNotNull(bankData);
+		LOG.info("retrieveBankData:"+ bankData);
+		assertNotNull(bankData.getBic());
+
+		checkSepaIban(test, bankData, EE_IBAN); // BankSupports:1
+		
+		bankData = test.retrieveBankData(EG_IBAN);
+		assertNotNull(bankData);
+		LOG.info("retrieveBankData:"+ bankData);
+		assertNotNull(bankData.getBic());
+
+		checkSepaIban(test, bankData, ES_IBAN); // BankSupports:15
+		checkSepaIban(test, bankData, FI_IBAN); // BankSupports:15
+
+		bankData = test.retrieveBankData(FO_IBAN);
+		assertNotNull(bankData);
+		LOG.info("retrieveBankData:"+ bankData);
+		assertNotNull(bankData.getBic());
+		
+		checkSepaIban(test, bankData, FR_IBAN); // BankSupports:15
+//		checkSepaIban(test, bankData, GB_IBAN); // BankSupports:     ???????????????
+
+		bankData = test.retrieveBankData(GE_IBAN);
+		assertNotNull(bankData);
+		LOG.info("retrieveBankData:"+ bankData);
+		assertNotNull(bankData.getBic());
+		
+		checkSepaIban(test, bankData, GI_IBAN); // BankSupports:1
+		
+		bankData = test.retrieveBankData(GL_IBAN);
+		assertNotNull(bankData);
+		LOG.info("retrieveBankData:"+ bankData);
+		assertNotNull(bankData.getBic());
+		
+		checkSepaIban(test, bankData, GR_IBAN); // BankSupports:15
+		
+		bankData = test.retrieveBankData(GT_IBAN);
+		assertNotNull(bankData);
+		LOG.info("retrieveBankData:"+ bankData);
+		assertNotNull(bankData.getBic());
+				
+		checkSepaIban(test, bankData, HR_IBAN); // BankSupports:1
+		checkSepaIban(test, bankData, HU_IBAN); // BankSupports:1
+		checkSepaIban(test, bankData, IE_IBAN); // BankSupports:7
+		
+		bankData = test.retrieveBankData(IL_IBAN);
+		assertNotNull(bankData);
+		LOG.info("retrieveBankData:"+ bankData);
+		assertNotNull(bankData.getBic());
+		
+		bankData = test.retrieveBankData(IQ_IBAN);
+		assertNotNull(bankData);
+		LOG.info("retrieveBankData:"+ bankData);
+		assertNotNull(bankData.getBic());
+		
+		checkSepaIban(test, bankData, IS_IBAN); // BankSupports:1
+		checkSepaIban(test, bankData, IT_IBAN); // BankSupports:15
+		
+		bankData = test.retrieveBankData(JO_IBAN);
+		assertNotNull(bankData);
+		LOG.info("retrieveBankData:"+ bankData);
+		assertNotNull(bankData.getBic());
+		
+		bankData = test.retrieveBankData(KW_IBAN);
+		assertNotNull(bankData);
+		LOG.info("retrieveBankData:"+ bankData);
+		assertNotNull(bankData.getBic());
+		
+		bankData = test.retrieveBankData(KZ_IBAN);
+		assertNotNull(bankData);
+		LOG.info("retrieveBankData:"+ bankData);
+		assertNotNull(bankData.getBic());
+		
+		bankData = test.retrieveBankData(LB_IBAN);
+		assertNotNull(bankData);
+		LOG.info("retrieveBankData:"+ bankData);
+		assertNotNull(bankData.getBic());
+		
+		bankData = test.retrieveBankData(LC_IBAN);
+		assertNotNull(bankData);
+		LOG.info("retrieveBankData:"+ bankData);
+		assertNotNull(bankData.getBic());
+		
+		checkSepaIban(test, bankData, LI_IBAN); // BankSupports:7
+		checkSepaIban(test, bankData, LT_IBAN); // BankSupports:7
+		checkSepaIban(test, bankData, LU_IBAN); // BankSupports:15
+		checkSepaIban(test, bankData, LV_IBAN); // BankSupports:1
+//		checkSepaIban(test, bankData, MC_IBAN); // BankSupports:       ???????????????????????
+		
+		bankData = test.retrieveBankData(MD_IBAN);
+		assertNotNull(bankData);
+		LOG.info("retrieveBankData:"+ bankData);
+		assertNotNull(bankData.getBic());
+		
+		bankData = test.retrieveBankData(ME_IBAN);
+		assertNotNull(bankData);
+		LOG.info("retrieveBankData:"+ bankData);
+		assertNotNull(bankData.getBic());
+		
+		bankData = test.retrieveBankData(MK_IBAN);
+		assertNotNull(bankData);
+		LOG.info("retrieveBankData:"+ bankData);
+		assertNotNull(bankData.getBic());
+		
+		bankData = test.retrieveBankData(MR_IBAN);
+		assertNotNull(bankData);
+		LOG.info("retrieveBankData:"+ bankData);
+		assertNotNull(bankData.getBic());
+		
+		checkSepaIban(test, bankData, MT_IBAN); // BankSupports:15
+
+		bankData = test.retrieveBankData(MU_IBAN);
+		assertNotNull(bankData);
+		LOG.info("retrieveBankData:"+ bankData);
+		assertNotNull(bankData.getBic());
+		
+		checkSepaIban(test, bankData, NL_IBAN); // BankSupports:15
+		checkSepaIban(test, bankData, NO_IBAN); // BankSupports:15
+
+		bankData = test.retrieveBankData(PK_IBAN);
+		assertNotNull(bankData);
+		LOG.info("retrieveBankData:"+ bankData);
+		assertNotNull(bankData.getBic());
+		
+		checkSepaIban(test, bankData, PL_IBAN); // BankSupports:1
+
+		bankData = test.retrieveBankData(PS_IBAN);
+		assertNotNull(bankData);
+		LOG.info("retrieveBankData:"+ bankData);
+		assertNotNull(bankData.getBic());
+				
+		checkSepaIban(test, bankData, PT_IBAN); // BankSupports:15
+		
+  }
+
+    void checkSepaIban(IbanToBankData test, BankData bankData, String iban) {
+    	bankData = test.getBankData(iban);
 		LOG.info("getBankData:"+ bankData);
-		bankData = test.retrieveBankData(CZ_IBAN);
+		bankData = test.retrieveBankData(iban);
 		assertNotNull(bankData);
 		LOG.info("retrieveBankData:"+ bankData);
 		assertNotNull(bankData.getBic());
 		assertTrue((bankData.getBankSupports() & SepaData.SCT)>0); // bank supports SEPA Credit Transfer
-		// BankSupports:15
-   }
-
+    }
 }
