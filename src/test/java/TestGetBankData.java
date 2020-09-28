@@ -48,7 +48,7 @@ public class TestGetBankData {
 	private static final String FI_IBAN = "FI2112345600000785";
 	private static final String FO_IBAN = "FO6264600001631634";
 	private static final String FR_IBAN = "FR1420041010050500013M02606";
-	private static final String GB_IBAN = "GB29NWBK60161331926819";        // TODO
+	private static final String GB_IBAN = "GB89CHAS60924241305901";
 	private static final String GE_IBAN = "GE29NB0000000101904917";
 	private static final String GI_IBAN = "GI75NWBK000000007099453";
 	private static final String GL_IBAN = "GL8964710001000206";
@@ -83,7 +83,25 @@ public class TestGetBankData {
 	private static final String PL_IBAN = "PL61109010140000071219812874";
 	private static final String PS_IBAN = "PS92PALS000000000400123456702";
 	private static final String PT_IBAN = "PT50003300000000539169561"; // caritas.pt
-												
+	private static final String QA_IBAN = "QA58DOHB00001234567890ABCDEFG";
+	private static final String RO_IBAN = "RO44BRDE410SV20462054100"; // crucearosie.ro/
+	private static final String RS_IBAN = "RS35260005601001611379";
+	private static final String SA_IBAN = "SA0380000000608010167519";
+	private static final String SC_IBAN = "SC18SSCB11010000000000001497USD";
+	private static final String SE_IBAN = "SE4550000000058398257466";
+	private static final String SI_IBAN = "SI56021400015556761"; // karitas.si                                      
+	private static final String SK_IBAN = "SK3112000000198742637541";            // TODO
+	private static final String SM_IBAN = "SM86U0322509800000000270100";
+	private static final String ST_IBAN = "ST23000100010051845310146";
+	private static final String SV_IBAN = "SV62CENR00000000000000700025";
+	private static final String TL_IBAN = "TL380080012345678910157";           // TODO
+	private static final String TN_IBAN = "TN5910006035183598478831";
+	private static final String TR_IBAN = "TR710020500000696117500104";
+	private static final String UA_IBAN = "UA213223130000026007233566001";
+	private static final String VA_IBAN = "VA59001123000012345678";
+	private static final String VG_IBAN = "VG96VPVG0000012345678901";
+	private static final String XK_IBAN = "XK051212012345678906";
+																
 	final static List<String> SEPA_COUNTRIES = Arrays.asList
 			( AD_IBAN // in iban_registry_0.pdf kein SEPA!
 			, AT_IBAN
@@ -116,6 +134,12 @@ public class TestGetBankData {
 			, NO_IBAN
 			, PL_IBAN
 			, PT_IBAN
+			, RO_IBAN
+			, SE_IBAN
+			, SI_IBAN
+			, SK_IBAN
+			, SM_IBAN
+			, VA_IBAN
 			);
 	
     @BeforeClass
@@ -232,7 +256,7 @@ public class TestGetBankData {
 		assertNotNull(bankData.getBic());
 		
 		checkSepaIban(test, bankData, FR_IBAN); // BankSupports:15
-//		checkSepaIban(test, bankData, GB_IBAN); // BankSupports:     ???????????????
+		checkSepaIban(test, bankData, GB_IBAN); // BankSupports:15
 
 		bankData = test.retrieveBankData(GE_IBAN);
 		assertNotNull(bankData);
@@ -344,8 +368,76 @@ public class TestGetBankData {
 		assertNotNull(bankData.getBic());
 				
 		checkSepaIban(test, bankData, PT_IBAN); // BankSupports:15
+
+		bankData = test.retrieveBankData(QA_IBAN);
+		assertNotNull(bankData);
+		LOG.info("retrieveBankData:"+ bankData);
+		assertNotNull(bankData.getBic());
 		
-  }
+		checkSepaIban(test, bankData, RO_IBAN); // BankSupports:1
+
+		bankData = test.retrieveBankData(RS_IBAN);
+		assertNotNull(bankData);
+		LOG.info("retrieveBankData:"+ bankData);
+		assertNotNull(bankData.getBic());
+
+		bankData = test.retrieveBankData(SA_IBAN);
+		assertNotNull(bankData);
+		LOG.info("retrieveBankData:"+ bankData);
+		assertNotNull(bankData.getBic());
+
+		bankData = test.retrieveBankData(SC_IBAN);
+		assertNotNull(bankData);
+		LOG.info("retrieveBankData:"+ bankData);
+		assertNotNull(bankData.getBic());
+		
+		checkSepaIban(test, bankData, SE_IBAN); // BankSupports:15
+		checkSepaIban(test, bankData, SI_IBAN); // BankSupports:15
+//		checkSepaIban(test, bankData, SK_IBAN); // BankSupports:         ?????????????
+		checkSepaIban(test, bankData, SM_IBAN); // BankSupports:7
+
+		bankData = test.retrieveBankData(ST_IBAN);
+		assertNotNull(bankData);
+		LOG.info("retrieveBankData:"+ bankData);
+		assertNotNull(bankData.getBic());
+
+		bankData = test.retrieveBankData(SV_IBAN);
+		assertNotNull(bankData);
+		LOG.info("retrieveBankData:"+ bankData);
+		assertNotNull(bankData.getBic());
+
+//		bankData = test.retrieveBankData(TL_IBAN);
+//		assertNotNull(bankData);
+//		LOG.info("retrieveBankData:"+ bankData);
+//		assertNotNull(bankData.getBic());
+
+		bankData = test.retrieveBankData(TN_IBAN);
+		assertNotNull(bankData);
+		LOG.info("retrieveBankData:"+ bankData);
+		assertNotNull(bankData.getBic());
+
+		bankData = test.retrieveBankData(TR_IBAN);
+		assertNotNull(bankData);
+		LOG.info("retrieveBankData:"+ bankData);
+		assertNotNull(bankData.getBic());
+
+		bankData = test.retrieveBankData(UA_IBAN);
+		assertNotNull(bankData);
+		LOG.info("retrieveBankData:"+ bankData);
+		assertNotNull(bankData.getBic());
+		
+		checkSepaIban(test, bankData, VA_IBAN); // BankSupports:1
+
+		bankData = test.retrieveBankData(VG_IBAN);
+		assertNotNull(bankData);
+		LOG.info("retrieveBankData:"+ bankData);
+		assertNotNull(bankData.getBic());
+
+		bankData = test.retrieveBankData(XK_IBAN);
+		assertNotNull(bankData);
+		LOG.info("retrieveBankData:"+ bankData);
+		assertNotNull(bankData.getBic());
+   }
 
     void checkSepaIban(IbanToBankData test, BankData bankData, String iban) {
     	bankData = test.getBankData(iban);
