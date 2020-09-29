@@ -90,13 +90,11 @@ public class TestGetBankData {
 	private static final String SC_IBAN = "SC18SSCB11010000000000001497USD";
 	private static final String SE_IBAN = "SE4550000000058398257466";
 	private static final String SI_IBAN = "SI56021400015556761"; // karitas.si                                      
-	private static final String SK_IBAN = "SK3112000000198742637541";            // TODO
+	private static final String SK_IBAN = "SK6911001234561234567890"; // selbstgeneriert : Account Number check digit not correct
 	private static final String SM_IBAN = "SM86U0322509800000000270100";
 	private static final String ST_IBAN = "ST23000100010051845310146";
 	private static final String SV_IBAN = "SV62CENR00000000000000700025";
-	private static final String xL_IBAN = "TL380050601000024524415"; // liefert keine BIC
-	private static final String TL_IBAN = "TL380050601000086313706"; // redcross.tl  dto 
-	//                                     TL380061240100513250760
+	private static final String TL_IBAN = "TL380050601000086313706"; // redcross.tl liefert leere BIC
 	private static final String TN_IBAN = "TN5910006035183598478831";
 	private static final String TR_IBAN = "TR710020500000696117500104";
 	private static final String UA_IBAN = "UA213223130000026007233566001";
@@ -395,7 +393,7 @@ public class TestGetBankData {
 		
 		checkSepaIban(test, bankData, SE_IBAN); // BankSupports:15
 		checkSepaIban(test, bankData, SI_IBAN); // BankSupports:15
-//		checkSepaIban(test, bankData, SK_IBAN); // BankSupports:         ?????????????
+		checkSepaIban(test, bankData, SK_IBAN); // BankSupports:15
 		checkSepaIban(test, bankData, SM_IBAN); // BankSupports:7
 
 		bankData = test.retrieveBankData(ST_IBAN);
