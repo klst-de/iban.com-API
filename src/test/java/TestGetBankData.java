@@ -70,7 +70,7 @@ public class TestGetBankData {
 	private static final String LT_IBAN = "LT407300010099679931"; // caritas.lt
 	private static final String LU_IBAN = "LU280019400644750000";
 	private static final String LV_IBAN = "LV46HABA0551008657797"; // caritas.lv
-	private static final String MC_IBAN = "MC5811222000010123456789030";         // TODO
+	private static final String MC_IBAN = "MC5811668400011234567890191"; // selbstgeneriert
 	private static final String MD_IBAN = "MD24AG000225100013104168";
 	private static final String ME_IBAN = "ME25505000012345678951";
 	private static final String MK_IBAN = "MK07250120000058984";
@@ -94,7 +94,9 @@ public class TestGetBankData {
 	private static final String SM_IBAN = "SM86U0322509800000000270100";
 	private static final String ST_IBAN = "ST23000100010051845310146";
 	private static final String SV_IBAN = "SV62CENR00000000000000700025";
-	private static final String TL_IBAN = "TL380080012345678910157";           // TODO
+	private static final String xL_IBAN = "TL380050601000024524415"; // liefert keine BIC
+	private static final String TL_IBAN = "TL380050601000086313706"; // redcross.tl  dto 
+	//                                     TL380061240100513250760
 	private static final String TN_IBAN = "TN5910006035183598478831";
 	private static final String TR_IBAN = "TR710020500000696117500104";
 	private static final String UA_IBAN = "UA213223130000026007233566001";
@@ -323,7 +325,7 @@ public class TestGetBankData {
 		checkSepaIban(test, bankData, LT_IBAN); // BankSupports:7
 		checkSepaIban(test, bankData, LU_IBAN); // BankSupports:15
 		checkSepaIban(test, bankData, LV_IBAN); // BankSupports:1
-//		checkSepaIban(test, bankData, MC_IBAN); // BankSupports:       ???????????????????????
+		checkSepaIban(test, bankData, MC_IBAN); // BankSupports:7
 		
 		bankData = test.retrieveBankData(MD_IBAN);
 		assertNotNull(bankData);
@@ -406,10 +408,10 @@ public class TestGetBankData {
 		LOG.info("retrieveBankData:"+ bankData);
 		assertNotNull(bankData.getBic());
 
-//		bankData = test.retrieveBankData(TL_IBAN);
-//		assertNotNull(bankData);
-//		LOG.info("retrieveBankData:"+ bankData);
-//		assertNotNull(bankData.getBic());
+		bankData = test.retrieveBankData(TL_IBAN);
+		assertNotNull(bankData);
+		LOG.info("retrieveBankData:"+ bankData.toString());
+		assertNotNull(bankData.getBic());
 
 		bankData = test.retrieveBankData(TN_IBAN);
 		assertNotNull(bankData);
