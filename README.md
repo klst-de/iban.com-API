@@ -32,11 +32,11 @@ You need a key the use the [iban.com/validation-api](https://www.iban.com/valida
 
 As of 2020, there are 36 members in [SEPA / Single_Euro_Payments_Area](https://en.wikipedia.org/wiki/Single_Euro_Payments_Area), including Monaco.
 
-There are 5 SEPA supports schemes:
-* `SCT -` Whether this bank supports SEPA Credit Transfer.      Überweisungen
-* `SDD -` Whether this bank supports SEPA Direct Debit.         Lastschrift 
-* `COR1-` Whether this bank supports SEPA COR1.                 Eillastschrift  
-* `B2B -` Whether this bank supports SEPA Business to Business. Firmenlastschrift 
+There are 5 SEPA support schemes:
+* `SCT -` Whether this bank supports SEPA Credit Transfer.      (de: Überweisungen)
+* `SDD -` Whether this bank supports SEPA Direct Debit.         (de: Lastschrift)
+* `COR1-` Whether this bank supports SEPA COR1.                 (de: Eillastschrift) 
+* `B2B -` Whether this bank supports SEPA Business to Business. (de: Firmenlastschrift) 
 * `SCC -` Whether this bank supports SEPA Card Clearing.
 
 `support_codes :7` means `SCT + SDD + COR1`
