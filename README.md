@@ -2,7 +2,7 @@
 
 A library for dealing with [iban.com/validation-api](https://www.iban.com/validation-api) to get information about banks.
 
-Example: you have an valid iban `MC58 1166 8400 0112 3456 7890 191`
+Example: you have a valid iban `MC58 1166 8400 0112 3456 7890 191`
 * you can see, this iban comes from Monaco, because the country code is MC
 * there are many banks in Monaco 
 * with some [wikipedia](https://en.wikipedia.org/wiki/International_Bank_Account_Number) information, you can discover the "bank_code":11668 and "branch_code":40001
@@ -16,6 +16,8 @@ System.out.println("bank name : "+bankData.getBank());
 System.out.println("address : "+bankData.getAddress());
 System.out.println("support_codes : "+bankData.getBankSupports());
 ```
+
+results to
 
 ```
 BIC : BERLMCMCXXX
