@@ -21,7 +21,7 @@ public class TestGetBankData {
 
 	private static final Logger LOG = Logger.getLogger(TestGetBankData.class.getName());
 	
-	private static final String API_KEY = "testKey";
+	private static final String API_KEY = API_Key_Provider.API_KEY;
 	
 	private static final String AD_IBAN = "AD1200012030200359100100";
 	private static final String AE_IBAN = "AE070331234567890123456";
@@ -70,6 +70,7 @@ public class TestGetBankData {
 	private static final String LT_IBAN = "LT407300010099679931"; // caritas.lt
 	private static final String LU_IBAN = "LU280019400644750000";
 	private static final String LV_IBAN = "LV46HABA0551008657797"; // caritas.lv
+	private static final String LY_IBAN = "LY83002048000020100120361"; // TODO
 	private static final String MC_IBAN = "MC5811668400011234567890191"; // selbstgeneriert
 	private static final String MD_IBAN = "MD24AG000225100013104168";
 	private static final String ME_IBAN = "ME25505000012345678951";
@@ -101,6 +102,33 @@ public class TestGetBankData {
 	private static final String VA_IBAN = "VA59001123000012345678";
 	private static final String VG_IBAN = "VG96VPVG0000012345678901";
 	private static final String XK_IBAN = "XK051212012345678906";
+	// https://www.iban.com/structure/ Countries which have Partial/Experimental use of the IBAN system :
+	private static final String AO_IBAN = "AO06004400006729503010102";    // "bank_code":"0044","branch_code":"0000"
+	private static final String BF_IBAN = "BF42BF0840101300463574000390"; // "bank_code":"084","branch_code":"01013"
+	private static final String BI_IBAN = "BI43201011067444";             // "bank_code":"201","branch_code":""
+	private static final String BJ_IBAN = "BJ66BJ0610100100144390000769"; // "bank_code":"BJ061","branch_code":"01001"
+	private static final String CF_IBAN = "CF4220001000010120069700160";  // "bank_code":"20001","branch_code":"00001"
+	private static final String CG_IBAN = "CG3930011000101013451300019";  // "bank_code":"30011","branch_code":"00010"
+	private static final String CI_IBAN = "CI93CI0080111301134291200589"; // "bank_code":"008","branch_code":"01113"
+	private static final String CM_IBAN = "CM2110002000300277976315008";  // "bank_code":"10002","branch_code":"00030"
+	private static final String CV_IBAN = "CV64000500000020108215144";    // "bank_code":"0005","branch_code":"0000"
+	private static final String DJ_IBAN = "DJ2110002010010409943020008";  // "bank_code":"10002","branch_code":"01001"
+	private static final String DZ_IBAN = "DZ580002100001113000000570";   // "bank_code":"00021","branch_code":"100001"
+	private static final String GA_IBAN = "GA2140021010032001890020126";  // "bank_code":"40021","branch_code":"01003"
+	private static final String GQ_IBAN = "GQ7050002001003715228190196";  // "bank_code":"50002","branch_code":"00100"
+	private static final String GW_IBAN = "GW04GW1430010181800637601";    // "bank_code":"GW143","branch_code":"00101"
+	private static final String HN_IBAN = "HN54PISA00000000000000123124"; // "bank_code":"PISA","branch_code":""
+	private static final String IR_IBAN = "IR710570029971601460641001";   // "bank_code":"057","branch_code":"997160"
+	private static final String KM_IBAN = "KM4600005000010010904400137";  // "bank_code":"00005","branch_code":"00001"
+	private static final String MA_IBAN = "MA64011519000001205000534921"; // "bank_code":"151","branch_code":"90000"
+	private static final String MG_IBAN = "MG4600005030071289421016045";  // "bank_code":"000","branch_code":""
+	private static final String ML_IBAN = "ML13ML0160120102600100668497"; // "bank_code":"ML016","branch_code":"01201"
+	private static final String MZ_IBAN = "MZ59000301080016367102371";    // "bank_code":"0003","branch_code":"0108"
+	private static final String NE_IBAN = "NE58NE0380100100130305000268"; // "bank_code":"038","branch_code":"01001"
+	private static final String NI_IBAN = "NI92BAMC000000000000000003123123"; // "bank_code":"BAMC","branch_code":""
+	private static final String SN_IBAN = "SN08SN0100152000048500003035"; // "bank_code":"010","branch_code":"01520"
+	private static final String TD_IBAN = "TD8960002000010271091600153";  // "bank_code":"60002","branch_code":"00001"
+	private static final String TG_IBAN = "TG53TG0090604310346500400070"; // "bank_code":"TG009","branch_code":"06043"
 																
 	final static List<String> SEPA_COUNTRIES = Arrays.asList
 			( AD_IBAN // in iban_registry_0.pdf kein SEPA!
@@ -147,9 +175,12 @@ public class TestGetBankData {
 //    	testAddress = null;
     }
     
+	IbanToBankData ibanToBankData;
+	BankData bankData;
+	
 	@Before 
     public void setup() {
-//		LOG.info("testAddress:"+ testAddress);
+		ibanToBankData = new IbanToBankData(API_KEY);
     }
 
     @Test
@@ -158,7 +189,7 @@ public class TestGetBankData {
 		BankData bankData =	test.retrieveBankData(AD_IBAN);
 		assertNull(bankData);
 		
-		test = new IbanToBankData(API_KEY);
+		test = new IbanToBankData("API_KEY");
 		bankData =	test.retrieveBankData(AD_IBAN);
 		assertNull(bankData);		
     }
@@ -171,11 +202,42 @@ public class TestGetBankData {
 		LOG.info("BankData:"+ bankData);
 		assertNull(bankData.getBic());
     }
-    
+
+    @Test
+    public void aValidExperimentalIban() {
+    	checkNonSepaIban(AO_IBAN);
+    	checkNonSepaIban(BF_IBAN);
+    	checkNonSepaIban(BI_IBAN);
+    	checkNonSepaIban(BJ_IBAN);
+    	checkNonSepaIban(CF_IBAN);
+    	checkNonSepaIban(CG_IBAN);
+    	checkNonSepaIban(CI_IBAN);
+    	checkNonSepaIban(CM_IBAN);
+    	checkNonSepaIban(CV_IBAN);
+    	checkNonSepaIban(DJ_IBAN);
+    	checkNonSepaIban(DZ_IBAN);
+    	checkNonSepaIban(GA_IBAN);
+    	checkNonSepaIban(GQ_IBAN);
+    	checkNonSepaIban(GW_IBAN);
+    	checkNonSepaIban(HN_IBAN);
+    	checkNonSepaIban(IR_IBAN);
+    	checkNonSepaIban(KM_IBAN);
+    	checkNonSepaIban(MA_IBAN);
+    	checkNonSepaIban(MG_IBAN);
+    	checkNonSepaIban(ML_IBAN);
+    	checkNonSepaIban(MZ_IBAN);
+    	checkNonSepaIban(NE_IBAN);
+    	checkNonSepaIban(NI_IBAN);
+    	checkNonSepaIban(SN_IBAN);
+    	checkNonSepaIban(TD_IBAN);
+    	checkNonSepaIban(TG_IBAN);
+    }
+
+
     @Test
     public void aValidIban() {
 		IbanToBankData test = new IbanToBankData(API_KEY);
-		BankData bankData = test.getBankData(AD_IBAN);
+		bankData = test.getBankData(AD_IBAN);
 		LOG.info("getBankData:"+ bankData);
 		bankData = test.retrieveBankData(AD_IBAN);
 		assertNotNull(bankData);
@@ -323,6 +385,12 @@ public class TestGetBankData {
 		checkSepaIban(test, bankData, LT_IBAN); // BankSupports:7
 		checkSepaIban(test, bankData, LU_IBAN); // BankSupports:15
 		checkSepaIban(test, bankData, LV_IBAN); // BankSupports:1
+
+//		bankData = test.retrieveBankData(LY_IBAN); // TODO added to iban_registry on 09/01/2020
+//		assertNotNull(bankData);
+//		LOG.info("retrieveBankData:"+ bankData);
+//		assertNotNull(bankData.getBic()); // exception
+		
 		checkSepaIban(test, bankData, MC_IBAN); // BankSupports:7
 		
 		bankData = test.retrieveBankData(MD_IBAN);
@@ -448,4 +516,14 @@ public class TestGetBankData {
 		assertNotNull(bankData.getBic());
 		assertTrue((bankData.getBankSupports() & SepaData.SCT)>0); // bank supports SEPA Credit Transfer
     }
+
+    void checkNonSepaIban(String iban) {
+    	bankData = ibanToBankData.retrieveBankData(iban);
+		assertNotNull(bankData);
+		LOG.info("retrieveBankData:"+ bankData.toString());
+		assertNotNull(bankData.getBic());
+		// country, country_iso und account
+		// werden bewußt in IbanToBankData.parseBankDataObject nicht gesetzt!
+    }
+    
 }
