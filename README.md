@@ -42,3 +42,9 @@ There are 5 SEPA support schemes:
 * `SCC -` Whether this bank supports SEPA Card Clearing.
 
 `support_codes :7` means `SCT + SDD + COR1`
+
+## Requirements
+
+The code depends to the following jars:
+* json-simple-1.1.jar
+* commons-validator-1.7.jar
