@@ -28,7 +28,7 @@ support_codes :7
 
 ## API_KEY
 
-You need a key the use the [iban.com/validation-api](https://www.iban.com/validation-api)
+You need a key to use the [iban.com/validation-api](https://www.iban.com/validation-api)
 
 ## SEPA support_codes
 
