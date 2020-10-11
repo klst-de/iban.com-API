@@ -32,7 +32,7 @@ You need a key to use the [iban.com/validation-api](https://www.iban.com/validat
 
 ## SEPA support_codes
 
-As of 2020, there are 36 members in [SEPA / Single_Euro_Payments_Area](https://en.wikipedia.org/wiki/Single_Euro_Payments_Area), including Monaco.
+As of 2020, there are [36 members](https://github.com/klst-de/iban.com-API/blob/master/doc/EPC409-09%20EPC%20List%20of%20SEPA%20Scheme%20Countries%20v2.6%20-%20January%202020.pdf) in [SEPA / Single_Euro_Payments_Area](https://en.wikipedia.org/wiki/Single_Euro_Payments_Area), including Monaco.
 
 There are 5 SEPA support schemes:
 * `SCT -` Whether this bank supports SEPA Credit Transfer.      (de: Überweisungen)
