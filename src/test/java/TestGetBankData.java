@@ -1,3 +1,4 @@
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -48,7 +49,9 @@ public class TestGetBankData {
 	private static final String FI_IBAN = "FI2112345600000785";
 	private static final String FO_IBAN = "FO6264600001631634";
 	private static final String FR_IBAN = "FR1420041010050500013M02606";
+	private static final String FR_RE_IBAN = "FR3212169121690500013M02642"; // liefert "bic":"REUBRERXXXX"
 	private static final String GB_IBAN = "GB89CHAS60924241305901";
+	private static final String GB_JE_IBAN = "GB90LOYD77470912345678";
 	private static final String GE_IBAN = "GE29NB0000000101904917";
 	private static final String GI_IBAN = "GI75NWBK000000007099453";
 	private static final String GL_IBAN = "GL8964710001000206";
@@ -237,274 +240,130 @@ public class TestGetBankData {
     @Test
     public void aValidIban() {
 		IbanToBankData test = new IbanToBankData(API_KEY);
-		bankData = test.getBankData(AD_IBAN);
-		LOG.info("getBankData:"+ bankData);
-		bankData = test.retrieveBankData(AD_IBAN);
-		assertNotNull(bankData);
-		LOG.info("retrieveBankData:"+ bankData);
-		assertNotNull(bankData.getBic());
-		assertTrue((bankData.getBankSupports() & SepaData.SCT)>0); // bank supports SEPA Credit Transfer
+		checkSepaIban(test, bankData, AD_IBAN); // BankSupports:1 - SEPA Credit Transfer
 
-		bankData = test.retrieveBankData(AE_IBAN);
-		assertNotNull(bankData);
-		LOG.info("retrieveBankData:"+ bankData);
-		assertNotNull(bankData.getBic());
-
-		bankData = test.retrieveBankData(AL_IBAN);
-		assertNotNull(bankData);
-		LOG.info("retrieveBankData:"+ bankData);
-		assertNotNull(bankData.getBic());
+		checkNonSepaIban(AE_IBAN);
+		checkNonSepaIban(AL_IBAN);
 		
 		checkSepaIban(test, bankData, AT_IBAN); // BankSupports:15		
 		
-		bankData = test.retrieveBankData(AZ_IBAN);
-		assertNotNull(bankData);
-		LOG.info("retrieveBankData:"+ bankData);
-		assertNotNull(bankData.getBic());
-
-		bankData = test.retrieveBankData(BA_IBAN);
-		assertNotNull(bankData);
-		LOG.info("retrieveBankData:"+ bankData);
-		assertNotNull(bankData.getBic());
+		checkNonSepaIban(AZ_IBAN);
+		checkNonSepaIban(BA_IBAN);
 
 		checkSepaIban(test, bankData, BE_IBAN); // BankSupports:7		
 		checkSepaIban(test, bankData, BG_IBAN); // BankSupports:1		
 
-		bankData = test.retrieveBankData(BH_IBAN);
-		assertNotNull(bankData);
-		LOG.info("retrieveBankData:"+ bankData);
-		assertNotNull(bankData.getBic());
-
-		bankData = test.retrieveBankData(BR_IBAN);
-		assertNotNull(bankData);
-		LOG.info("retrieveBankData:"+ bankData);
-		assertNotNull(bankData.getBic());
-
-		bankData = test.retrieveBankData(BY_IBAN);
-		assertNotNull(bankData);
-		LOG.info("retrieveBankData:"+ bankData);
-		assertNotNull(bankData.getBic());
+		checkNonSepaIban(BH_IBAN);
+		checkNonSepaIban(BR_IBAN);
+		checkNonSepaIban(BY_IBAN);
 
 		checkSepaIban(test, bankData, CH_IBAN); // BankSupports:15		
 		
-		bankData = test.retrieveBankData(CR_IBAN);
-		assertNotNull(bankData);
-		LOG.info("retrieveBankData:"+ bankData);
-		assertNotNull(bankData.getBic());
+		checkNonSepaIban(CR_IBAN);
 
 		checkSepaIban(test, bankData, CY_IBAN); // BankSupports:7		
 		checkSepaIban(test, bankData, CZ_IBAN); // BankSupports:15
 		checkSepaIban(test, bankData, DE_IBAN); // BankSupports:31
 		checkSepaIban(test, bankData, DK_IBAN); // BankSupports:1
 		
-		bankData = test.retrieveBankData(DO_IBAN);
-		assertNotNull(bankData);
-		LOG.info("retrieveBankData:"+ bankData);
-		assertNotNull(bankData.getBic());
+		checkNonSepaIban(DO_IBAN);
 
 		checkSepaIban(test, bankData, EE_IBAN); // BankSupports:1
 		
-		bankData = test.retrieveBankData(EG_IBAN);
-		assertNotNull(bankData);
-		LOG.info("retrieveBankData:"+ bankData);
-		assertNotNull(bankData.getBic());
+		checkNonSepaIban(EG_IBAN);
 
 		checkSepaIban(test, bankData, ES_IBAN); // BankSupports:15
 		checkSepaIban(test, bankData, FI_IBAN); // BankSupports:15
 
-		bankData = test.retrieveBankData(FO_IBAN);
-		assertNotNull(bankData);
-		LOG.info("retrieveBankData:"+ bankData);
-		assertNotNull(bankData.getBic());
+		checkNonSepaIban(FO_IBAN);
 		
 		checkSepaIban(test, bankData, FR_IBAN); // BankSupports:15
+		checkNonSepaIban(FR_RE_IBAN); // FR includes includes RE Réunion: IBAN starts with FR, resulted BIC-country/territory is RE 
+		assertEquals("REUBRERXXXX", bankData.getBic());
+		
 		checkSepaIban(test, bankData, GB_IBAN); // BankSupports:15
+		checkNonSepaIban(GB_JE_IBAN); // GB includes: Isle of Man (IM), Guernsey (GG), Jersey (JE): IBAN starts with GB,
+		assertEquals("LOYDJESHXXX", bankData.getBic()); // resulted BIC-country/territory is JE
 
-		bankData = test.retrieveBankData(GE_IBAN);
-		assertNotNull(bankData);
-		LOG.info("retrieveBankData:"+ bankData);
-		assertNotNull(bankData.getBic());
+		checkNonSepaIban(GE_IBAN);
 		
 		checkSepaIban(test, bankData, GI_IBAN); // BankSupports:1
 		
-		bankData = test.retrieveBankData(GL_IBAN);
-		assertNotNull(bankData);
-		LOG.info("retrieveBankData:"+ bankData);
-		assertNotNull(bankData.getBic());
+		checkNonSepaIban(GL_IBAN);
 		
 		checkSepaIban(test, bankData, GR_IBAN); // BankSupports:15
 		
-		bankData = test.retrieveBankData(GT_IBAN);
-		assertNotNull(bankData);
-		LOG.info("retrieveBankData:"+ bankData);
-		assertNotNull(bankData.getBic());
+		checkNonSepaIban(GT_IBAN);
 				
 		checkSepaIban(test, bankData, HR_IBAN); // BankSupports:1
 		checkSepaIban(test, bankData, HU_IBAN); // BankSupports:1
 		checkSepaIban(test, bankData, IE_IBAN); // BankSupports:7
 		
-		bankData = test.retrieveBankData(IL_IBAN);
-		assertNotNull(bankData);
-		LOG.info("retrieveBankData:"+ bankData);
-		assertNotNull(bankData.getBic());
-		
-		bankData = test.retrieveBankData(IQ_IBAN);
-		assertNotNull(bankData);
-		LOG.info("retrieveBankData:"+ bankData);
-		assertNotNull(bankData.getBic());
+		checkNonSepaIban(IL_IBAN);
+		checkNonSepaIban(IQ_IBAN);
 		
 		checkSepaIban(test, bankData, IS_IBAN); // BankSupports:1
 		checkSepaIban(test, bankData, IT_IBAN); // BankSupports:15
 		
-		bankData = test.retrieveBankData(JO_IBAN);
-		assertNotNull(bankData);
-		LOG.info("retrieveBankData:"+ bankData);
-		assertNotNull(bankData.getBic());
-		
-		bankData = test.retrieveBankData(KW_IBAN);
-		assertNotNull(bankData);
-		LOG.info("retrieveBankData:"+ bankData);
-		assertNotNull(bankData.getBic());
-		
-		bankData = test.retrieveBankData(KZ_IBAN);
-		assertNotNull(bankData);
-		LOG.info("retrieveBankData:"+ bankData);
-		assertNotNull(bankData.getBic());
-		
-		bankData = test.retrieveBankData(LB_IBAN);
-		assertNotNull(bankData);
-		LOG.info("retrieveBankData:"+ bankData);
-		assertNotNull(bankData.getBic());
-		
-		bankData = test.retrieveBankData(LC_IBAN);
-		assertNotNull(bankData);
-		LOG.info("retrieveBankData:"+ bankData);
-		assertNotNull(bankData.getBic());
+		checkNonSepaIban(JO_IBAN);
+		checkNonSepaIban(KW_IBAN);
+		checkNonSepaIban(KZ_IBAN);
+		checkNonSepaIban(LB_IBAN);
+		checkNonSepaIban(LC_IBAN);
 		
 		checkSepaIban(test, bankData, LI_IBAN); // BankSupports:7
 		checkSepaIban(test, bankData, LT_IBAN); // BankSupports:7
 		checkSepaIban(test, bankData, LU_IBAN); // BankSupports:15
 		checkSepaIban(test, bankData, LV_IBAN); // BankSupports:1
 
-//		bankData = test.retrieveBankData(LY_IBAN); // TODO added to iban_registry on 09/01/2020
-//		assertNotNull(bankData);
-//		LOG.info("retrieveBankData:"+ bankData);
-//		assertNotNull(bankData.getBic()); // exception
+//		checkNonSepaIban(LY_IBAN); // TODO added to iban_registry on 09/01/2020
 		
 		checkSepaIban(test, bankData, MC_IBAN); // BankSupports:7
 		
-		bankData = test.retrieveBankData(MD_IBAN);
-		assertNotNull(bankData);
-		LOG.info("retrieveBankData:"+ bankData);
-		assertNotNull(bankData.getBic());
-		
-		bankData = test.retrieveBankData(ME_IBAN);
-		assertNotNull(bankData);
-		LOG.info("retrieveBankData:"+ bankData);
-		assertNotNull(bankData.getBic());
-		
-		bankData = test.retrieveBankData(MK_IBAN);
-		assertNotNull(bankData);
-		LOG.info("retrieveBankData:"+ bankData);
-		assertNotNull(bankData.getBic());
-		
-		bankData = test.retrieveBankData(MR_IBAN);
-		assertNotNull(bankData);
-		LOG.info("retrieveBankData:"+ bankData);
-		assertNotNull(bankData.getBic());
+		checkNonSepaIban(MD_IBAN);
+		checkNonSepaIban(ME_IBAN);
+		checkNonSepaIban(MK_IBAN);
+		checkNonSepaIban(MR_IBAN);
 		
 		checkSepaIban(test, bankData, MT_IBAN); // BankSupports:15
 
-		bankData = test.retrieveBankData(MU_IBAN);
-		assertNotNull(bankData);
-		LOG.info("retrieveBankData:"+ bankData);
-		assertNotNull(bankData.getBic());
+		checkNonSepaIban(MU_IBAN);
 		
 		checkSepaIban(test, bankData, NL_IBAN); // BankSupports:15
 		checkSepaIban(test, bankData, NO_IBAN); // BankSupports:15
 
-		bankData = test.retrieveBankData(PK_IBAN);
-		assertNotNull(bankData);
-		LOG.info("retrieveBankData:"+ bankData);
-		assertNotNull(bankData.getBic());
+		checkNonSepaIban(PK_IBAN);
 		
 		checkSepaIban(test, bankData, PL_IBAN); // BankSupports:1
 
-		bankData = test.retrieveBankData(PS_IBAN);
-		assertNotNull(bankData);
-		LOG.info("retrieveBankData:"+ bankData);
-		assertNotNull(bankData.getBic());
+		checkNonSepaIban(PS_IBAN);
 				
 		checkSepaIban(test, bankData, PT_IBAN); // BankSupports:15
 
-		bankData = test.retrieveBankData(QA_IBAN);
-		assertNotNull(bankData);
-		LOG.info("retrieveBankData:"+ bankData);
-		assertNotNull(bankData.getBic());
+		checkNonSepaIban(QA_IBAN);
 		
 		checkSepaIban(test, bankData, RO_IBAN); // BankSupports:1
 
-		bankData = test.retrieveBankData(RS_IBAN);
-		assertNotNull(bankData);
-		LOG.info("retrieveBankData:"+ bankData);
-		assertNotNull(bankData.getBic());
-
-		bankData = test.retrieveBankData(SA_IBAN);
-		assertNotNull(bankData);
-		LOG.info("retrieveBankData:"+ bankData);
-		assertNotNull(bankData.getBic());
-
-		bankData = test.retrieveBankData(SC_IBAN);
-		assertNotNull(bankData);
-		LOG.info("retrieveBankData:"+ bankData);
-		assertNotNull(bankData.getBic());
+		checkNonSepaIban(RS_IBAN);
+		checkNonSepaIban(SA_IBAN);
+		checkNonSepaIban(SC_IBAN);
 		
 		checkSepaIban(test, bankData, SE_IBAN); // BankSupports:15
 		checkSepaIban(test, bankData, SI_IBAN); // BankSupports:15
 		checkSepaIban(test, bankData, SK_IBAN); // BankSupports:15
 		checkSepaIban(test, bankData, SM_IBAN); // BankSupports:7
 
-		bankData = test.retrieveBankData(ST_IBAN);
-		assertNotNull(bankData);
-		LOG.info("retrieveBankData:"+ bankData);
-		assertNotNull(bankData.getBic());
-
-		bankData = test.retrieveBankData(SV_IBAN);
-		assertNotNull(bankData);
-		LOG.info("retrieveBankData:"+ bankData);
-		assertNotNull(bankData.getBic());
-
-		bankData = test.retrieveBankData(TL_IBAN);
-		assertNotNull(bankData);
-		LOG.info("retrieveBankData:"+ bankData.toString());
-		assertNotNull(bankData.getBic());
-
-		bankData = test.retrieveBankData(TN_IBAN);
-		assertNotNull(bankData);
-		LOG.info("retrieveBankData:"+ bankData);
-		assertNotNull(bankData.getBic());
-
-		bankData = test.retrieveBankData(TR_IBAN);
-		assertNotNull(bankData);
-		LOG.info("retrieveBankData:"+ bankData);
-		assertNotNull(bankData.getBic());
-
-		bankData = test.retrieveBankData(UA_IBAN);
-		assertNotNull(bankData);
-		LOG.info("retrieveBankData:"+ bankData);
-		assertNotNull(bankData.getBic());
+		checkNonSepaIban(ST_IBAN);
+		checkNonSepaIban(SV_IBAN);
+		checkNonSepaIban(TL_IBAN);
+		checkNonSepaIban(TN_IBAN);
+		checkNonSepaIban(TR_IBAN);
+		checkNonSepaIban(UA_IBAN);
 		
 		checkSepaIban(test, bankData, VA_IBAN); // BankSupports:1
 
-		bankData = test.retrieveBankData(VG_IBAN);
-		assertNotNull(bankData);
-		LOG.info("retrieveBankData:"+ bankData);
-		assertNotNull(bankData.getBic());
-
-		bankData = test.retrieveBankData(XK_IBAN);
-		assertNotNull(bankData);
-		LOG.info("retrieveBankData:"+ bankData);
-		assertNotNull(bankData.getBic());
+		checkNonSepaIban(VG_IBAN);
+		checkNonSepaIban(XK_IBAN);
    }
 
     void checkSepaIban(IbanToBankData test, BankData bankData, String iban) {
