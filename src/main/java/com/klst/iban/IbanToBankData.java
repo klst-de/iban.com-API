@@ -215,7 +215,7 @@ public class IbanToBankData {
 
 	BankData parseBankDataObject(JSONObject bank_data) {
 		BankData bankData = new BankData();
-		String bic = (String) bank_data.get("bic");
+		String bic = (String) bank_data.get(BIC);
 		bankData.setBic(bic);
 		String bank = (String) bank_data.get(BANK); // aka bank name
 		bankData.setBank(bank);
@@ -237,6 +237,7 @@ public class IbanToBankData {
 		return bankData;
 	}
 	
+    static final String BIC = "bic";
     static final String SWIFT_CODE = "swift_code"; // aka BIC
     static final String BANK = "bank"; // bank name
     static final String BANK_CODE = "bank_code"; // String BankData.bankIdentifier, int BankData.bankCode
