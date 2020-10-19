@@ -49,6 +49,7 @@ public class TestGetBankData {
 	private static final String EG_IBAN = "EG380019000500000000263180002";
 	private static final String ES_IBAN = "ES9121000418450200051332";
 	private static final String FI_IBAN = "FI2112345600000785";
+	                                 // or FI5542345670000081 @see https://www.ecbs.org/iban/finland-bank-account-number.html
 	private static final String FO_IBAN = "FO6264600001631634";
 	private static final String FR_IBAN = "FR1420041010050500013M02606";
 	private static final String FR_RE_IBAN = "FR3212169121690500013M02642"; // liefert "bic":"REUBRERXXXX"
