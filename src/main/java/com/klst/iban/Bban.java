@@ -173,6 +173,14 @@ public class Bban {
      	this.groupBankCode = groupBankCode;
     }
    
+    public String getGroupBranchCode(String iban) {
+    	if(this.groupBranchCode==null) return "";
+		BankData bankData = new BankData();
+		String bban = getBban(iban, bankData);
+		String[] groups = this.regexValidator.match(bban);
+		return groups[this.groupBranchCode];
+    }
+    
     public BankData getBankData(String iban) {
 		BankData bankData = new BankData();
 		String bban = getBban(iban, bankData);
