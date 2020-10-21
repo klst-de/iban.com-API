@@ -19,7 +19,7 @@ import org.json.simple.parser.ParseException;
 import com.klst.iban.Result.BankData;
 import com.klst.iban.Result.SepaData;
 
-public class IbanToBankData { 
+public class IbanToBankData implements IbanBankData { 
 	
 	private static final Logger LOG = Logger.getLogger(IbanToBankData.class.getName());
 
@@ -38,11 +38,15 @@ public class IbanToBankData {
 		this.api_key = api_key;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public BankData getBankData(String iban) {
 		IBANValidator validator = IBANValidator.getInstance();
 		if(!validator.isValid(iban)) return null;
 
-		LOG.info(iban + " is valid.");		
+		LOG.config(iban + " is valid.");		
 		this.iban = iban;
 		return getBankData();
 	}
@@ -97,7 +101,7 @@ public class IbanToBankData {
 	        // json: {"bank_data":[],"sepa_data":[],"validations":[],"errors":[{"code":"301","message":"API Key is invalid"}]}
 	        // xml: <?xml version="1.0"?><result><bank_data/><sepa_data/><validations><chars><code/><message/></chars><iban><code/><message/></iban><account><code/><message/></account><structure><code/><message/></structure><length><code/><message/></length><country_support><code/><message/></country_support></validations><errors><error><code>301</code><message>API Key is invalid</message></error></errors></result>
 	        String jsonString = response.toString();
-//	        LOG.info("response:\n"+jsonString+"<"); 
+	        LOG.fine("response:\n"+jsonString+"<"); 
 	        if(jsonString.isEmpty()) return null;
 // Test:
 //        	String jsonString = "{\"bank_data\":[],\"sepa_data\":[],\"validations\":[],\"errors\":[{\"code\":\"301\",\"message\":\"API Key is invalid\"}]}";
@@ -197,7 +201,7 @@ public class IbanToBankData {
 
  */
 	void parseValidationObject(String iban, JSONObject validation, boolean verbose) {
-    	LOG.info("validations for iban "+iban); 
+    	LOG.fine("validations for iban "+iban); 
     	parseValidationObject( validation, verbose );		
 	}
 	void parseValidationObject(JSONObject validation) {
@@ -225,6 +229,7 @@ public class IbanToBankData {
 		bankData.setBankIdentifier(bank_code);
 		// optional:
 		bankData = getOptionalKey(bank_data, BRANCH, bankData);
+		bankData = getOptionalKey(bank_data, BRANCH_CODE, bankData);
 		bankData = getOptionalKey(bank_data, ADDRESS, bankData);
 		bankData = getOptionalKey(bank_data, STATE, bankData);
 		bankData = getOptionalKey(bank_data, ZIP, bankData);
@@ -258,6 +263,7 @@ public class IbanToBankData {
 		Object value = bank_data.get(key);
 		if(value!=null) {
 			if(key.equals(BRANCH)) bankData.setBranch(value);
+			else if(key.equals(BRANCH_CODE)) bankData.branchCode = value; // no setter!
 			else if(key.equals(ADDRESS)) bankData.setAddress(value);
 			else if(key.equals(STATE)) bankData.setState(value);
 			else if(key.equals(ZIP)) bankData.setZipString((String)value);
@@ -291,9 +297,9 @@ public class IbanToBankData {
 			Bban bData = Bban.BBAN.get(countryCode); // liefert eine Instanz mit Methode
 			bankData = bData.getBankData(iban);
 		} else {
-			LOG.warning(iban + " NOT implemented.");			
+			LOG.warning("No BBAN information for countryCode "+countryCode);
 		}
-		LOG.info(iban + " -> bankData:"+bankData);
+		LOG.config(iban + " -> bankData:"+bankData);
 		return bankData;
 	}
 

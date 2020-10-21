@@ -319,7 +319,7 @@ public class TestGetBankData {
 		checkSepaIban(test, bankData, LU_IBAN); // BankSupports:15
 		checkSepaIban(test, bankData, LV_IBAN); // BankSupports:1
 
-//		checkNonSepaIban(LY_IBAN); // TODO added to iban_registry on 09/01/2020
+//		checkNonSepaIban(LY_IBAN); // TODO added to iban_registry on 09/01/2020 but without BIC
 		
 		checkSepaIban(test, bankData, MC_IBAN); // BankSupports:7
 		
@@ -371,10 +371,10 @@ public class TestGetBankData {
 
     void checkSepaIban(IbanToBankData test, BankData bankData, String iban) {
     	bankData = test.getBankData(iban);
-		LOG.info("getBankData:"+ bankData);
+		LOG.config("getBankData:"+ bankData);
 		bankData = test.retrieveBankData(iban);
 		assertNotNull(bankData);
-		LOG.info("retrieveBankData:"+ bankData);
+		LOG.config("retrieveBankData:"+ bankData);
 		assertNotNull(bankData.getBic());
 		assertTrue((bankData.getBankSupports() & SepaData.SCT)>0); // bank supports SEPA Credit Transfer
     }
@@ -382,7 +382,7 @@ public class TestGetBankData {
     void checkNonSepaIban(String iban) {
     	bankData = ibanToBankData.retrieveBankData(iban);
 		assertNotNull(bankData);
-		LOG.info("retrieveBankData:"+ bankData.toString());
+		LOG.config("retrieveBankData:"+ bankData.toString());
 		assertNotNull(bankData.getBic());
 		// country, country_iso und account
 		// werden bewußt in IbanToBankData.parseBankDataObject nicht gesetzt!
