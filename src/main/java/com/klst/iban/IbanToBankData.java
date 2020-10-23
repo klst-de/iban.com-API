@@ -177,7 +177,6 @@ public class IbanToBankData implements IbanBankData {
 		return code;
 	}
 
-    //201 	Validation Failed 	Account Number check digit not correct
 /*
 
 001 	Validation Success 	IBAN Check digit is correct
@@ -194,6 +193,8 @@ public class IbanToBankData implements IbanBankData {
 205 	Validation Failed 	IBAN structure is not correct
 206 	Validation Failed 	IBAN contains illegal characters
 207 	Validation Failed 	Country does not support IBAN standard
+
+301 	in errors Object 	API Key is invalid
 
 ,"validations":{"chars":{"code":"006","message":"IBAN does not contain illegal characters"}
              ,"account":{"code":"002","message":"Account Number check digit is correct"} OR

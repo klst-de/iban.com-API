@@ -68,18 +68,41 @@ public class MiniTest {
     }
 
     @Test
+    public void invalidApiKey() {
+    	IbanToBankData ibanToBankData = new IbanToBankData("invalidKey");
+    	assertNull(ibanToBankData.retrieveBankData(null));
+    	assertNull(ibanToBankData.getBankData("DE89370400440532013000"));
+    }
+
+    @Test
     public void withApiKey() {
     	LOG.fine("fine start");
-    	IbanToBankData ibanToBankData = new IbanToBankData(API_KEY);
     	String AD_IBAN = "AD1200012030200359100100";
+    	IbanToBankData ibanToBankData = new IbanToBankData(); // no key
     	BankData bankData = ibanToBankData.getBankData(AD_IBAN);
+    	LOG.info("AD partiall bankData:"+bankData);
     	assertEquals(1, bankData.getBankCode());
-    	assertEquals(2030, bankData.getBranchCode());
+    	assertEquals("0001", bankData.getBankIdentifier());
+    	Object branchCode = bankData.getBranchCode();
+        if(branchCode!=null) try {
+        	assertEquals(2030, Integer.parseInt(branchCode.toString()));
+        } catch (NumberFormatException e) {
+        	LOG.info("BranchCode "+branchCode + " is not numeric.");
+        }        
+    	
+    	ibanToBankData = new IbanToBankData(API_KEY);
+    	bankData = ibanToBankData.getBankData(AD_IBAN);
     	bankData = ibanToBankData.retrieveBankData(AD_IBAN);
     	assertEquals("BACAADADXXX", bankData.getBic());
     	assertEquals(1, bankData.getBankSupports());
-    	LOG.info("AD bankData:"+bankData);
+    	LOG.info("AD bankData:"+bankData);    	
 
+    	String GR_IBAN = "GR1601101250000000012300695";
+    	bankData = ibanToBankData.getBankData(GR_IBAN);
+    	assertEquals(11, bankData.getBankCode());
+    	assertEquals("011", bankData.getBankIdentifier());
+    	assertEquals("0125", bankData.getBranchCode());
+    	
     	bankData = ibanToBankData.retrieveBankData("LY83002048000020100120361");
 /*
 {"bank_data":{"bic":null,"branch":null,"bank":null,"address":null,"city":null,"state":null,"zip":null,"phone":null,"fax":null,"www":null,"email":null
