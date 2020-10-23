@@ -40,15 +40,25 @@ public class IbanToBankData implements IbanBankData {
 	
 	/**
 	 * {@inheritDoc}
+	 * 
+	 * <p>
+	 * If api_key exists, the bank data is retrieved from iban.com/iban-checker.
+	 * Otherwise the resulted BankData object is partially filled.
+	 * <br>
+	 * For invalid ibans the result is null.
 	 */
 	@Override
 	public BankData getBankData(String iban) {
+		return getBankData(iban, true);
+	}
+	
+	public BankData getBankData(String iban, boolean retrieveBankData) {
 		IBANValidator validator = IBANValidator.getInstance();
 		if(!validator.isValid(iban)) return null;
 
 		LOG.config(iban + " is valid.");		
 		this.iban = iban;
-		return getBankData();
+		return (retrieveBankData && this.api_key!=null) ? retrieveBankData(this.iban) : getBankData();
 	}
 	
 	/**
@@ -214,6 +224,7 @@ public class IbanToBankData implements IbanBankData {
 		code = parseErrorObject( (JSONObject)validation.get("structure"), verbose);
 		code = parseErrorObject( (JSONObject)validation.get("length"), verbose);
 		code = parseErrorObject( (JSONObject) validation.get("country_support"), verbose);
+		LOG.fine("country_support "+code); 
 		return;
 	}
 
@@ -263,7 +274,16 @@ public class IbanToBankData implements IbanBankData {
 		Object value = bank_data.get(key);
 		if(value!=null) {
 			if(key.equals(BRANCH)) bankData.setBranch(value);
-			else if(key.equals(BRANCH_CODE)) bankData.branchCode = value; // no setter!
+			else if(key.equals(BRANCH_CODE)) {
+				bankData.branchCode = value; // no setter!
+				// client responsibility to get numeric branch code:
+//	            try {
+//	            	int bc = Integer.parseInt(value.toString());
+//	            	bankData.branchCode = new Integer(bc); 
+//	            } catch (NumberFormatException e) {
+//	            	LOG.fine(BRANCH_CODE+" "+value + " is not numeric.");
+//	            }        
+			}
 			else if(key.equals(ADDRESS)) bankData.setAddress(value);
 			else if(key.equals(STATE)) bankData.setState(value);
 			else if(key.equals(ZIP)) bankData.setZipString((String)value);
@@ -290,9 +310,9 @@ public class IbanToBankData implements IbanBankData {
 
 	private BankData getBankData() {
 		BankData bankData = new BankData();
-		SepaData sepaData = new SepaData();
+//		SepaData sepaData = new SepaData();
 		String countryCode = iban.substring(0, 2);
-		String bban = iban.substring(4);
+//		String bban = iban.substring(4);
 		if(Bban.BBAN.get(countryCode)!=null) {
 			Bban bData = Bban.BBAN.get(countryCode); // liefert eine Instanz mit Methode
 			bankData = bData.getBankData(iban);

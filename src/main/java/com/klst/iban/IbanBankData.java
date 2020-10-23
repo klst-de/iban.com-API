@@ -5,7 +5,7 @@ import com.klst.iban.Result.BankData;
 public interface IbanBankData {
 	
 	/**
-	 * validate iban and get BankData without retrieving the information from iban.com api.
+	 * validates iban and get BankData without retrieving the information from iban.com api.
 	 * 
 	 * @param iban
 	 * @return BankData object
