@@ -27,6 +27,20 @@ public class IbanToBankData implements IbanBankData {
     static final String USER_AGENT = "API Client/1.0";
     static final String FORMAT_XML = "&format=xml";
     static final String FORMAT_JSON = "&format=json";
+    
+    static final String BIC = Bank_Data.BIC;
+    static final String BRANCH = Bank_Data.BRANCH;
+    static final String BANK = Bank_Data.BANK;
+    static final String ADDRESS = Bank_Data.ADDRESS;
+    static final String CITY = Bank_Data.CITY;
+    static final String STATE = Bank_Data.STATE;
+    static final String ZIP = Bank_Data.ZIP;
+    static final String PHONE = Bank_Data.PHONE;
+    static final String FAX = Bank_Data.FAX;
+    static final String WWW = Bank_Data.WWW;
+    static final String EMAIL = Bank_Data.EMAIL;
+    static final String BANK_CODE = Bank_Data.BANK_CODE;
+    static final String BRANCH_CODE = Bank_Data.BRANCH_CODE;
 
 	String api_key = null;
 	String iban = null;
@@ -231,74 +245,33 @@ public class IbanToBankData implements IbanBankData {
 
 	BankData parseBankDataObject(JSONObject bank_data) {
 		BankData bankData = new BankData();
-		String bic = (String) bank_data.get(BIC);
-		bankData.setBic(bic);
-		String bank = (String) bank_data.get(BANK); // aka bank name
-		bankData.setBank(bank);
-		String city = (String) bank_data.get(CITY);
-		bankData.setCity(city);
-		String bank_code = (String) bank_data.get(BANK_CODE);
-		bankData.setBankIdentifier(bank_code);
+		// mandatory props:
+		bankData.setBic((String)bank_data.get(BIC));
+		bankData.setBank((String)bank_data.get(BANK)); // aka bank name
+		bankData.setCity((String)bank_data.get(CITY));
+		bankData.setBankIdentifier((String)bank_data.get(BANK_CODE));
 		// optional:
-		bankData = getOptionalKey(bank_data, BRANCH, bankData);
-		bankData = getOptionalKey(bank_data, BRANCH_CODE, bankData);
-		bankData = getOptionalKey(bank_data, ADDRESS, bankData);
-		bankData = getOptionalKey(bank_data, STATE, bankData);
-		bankData = getOptionalKey(bank_data, ZIP, bankData);
-		bankData = getOptionalKey(bank_data, PHONE, bankData);
-		bankData = getOptionalKey(bank_data, FAX, bankData);
-		bankData = getOptionalKey(bank_data, WWW, bankData);
-		bankData = getOptionalKey(bank_data, EMAIL, bankData);
-		// country, country_iso
-		// account
+		try {
+			bankData = Bank_Data.getOptionalKey(bank_data, BRANCH, bankData);
+			bankData = Bank_Data.getOptionalKey(bank_data, BRANCH_CODE, bankData);
+			bankData = Bank_Data.getOptionalKey(bank_data, ADDRESS, bankData);
+			bankData = Bank_Data.getOptionalKey(bank_data, STATE, bankData);
+			bankData = Bank_Data.getOptionalKey(bank_data, ZIP, bankData);
+			bankData = Bank_Data.getOptionalKey(bank_data, PHONE, bankData);
+			bankData = Bank_Data.getOptionalKey(bank_data, FAX, bankData);
+			bankData = Bank_Data.getOptionalKey(bank_data, WWW, bankData);
+			bankData = Bank_Data.getOptionalKey(bank_data, EMAIL, bankData);
+		} catch (Exception e) {
+			LOG.severe(e.getMessage());
+//			e.printStackTrace();
+		}
+		// I intentionally do not use account, because I'm not dealing with the account, 
+		// country and country_iso, 
+		// because each iban starts with two chars country code, however it is not iso (see XK)
+
 		return bankData;
 	}
 	
-    static final String BIC = "bic";
-    static final String SWIFT_CODE = "swift_code"; // aka BIC
-    static final String BANK = "bank"; // bank name
-    static final String BANK_CODE = "bank_code"; // String BankData.bankIdentifier, int BankData.bankCode
-    static final String ID = "id"; // unique per country, value can be bankCode
-    static final String BRANCH = "branch";
-    static final String BRANCH_CODE = "branch_code";
-    static final String ADDRESS = "address";
-    static final String STATE = "state";
-    static final String CITY = "city";
-    static final String ZIP = "zip";
-    static final String PHONE = "phone";
-    static final String FAX = "fax";
-    static final String WWW = "www";
-    static final String EMAIL = "email";
-    static final String SUPPORT_CODES = "support_codes";
-    
- 	private BankData getOptionalKey(JSONObject bank_data, String key, BankData bankData) {
-		Object value = bank_data.get(key);
-		if(value!=null) {
-			if(key.equals(BRANCH)) bankData.setBranch(value);
-			else if(key.equals(BRANCH_CODE)) {
-				bankData.branchCode = value; // no setter!
-				// client responsibility to get numeric branch code:
-//	            try {
-//	            	int bc = Integer.parseInt(value.toString());
-//	            	bankData.branchCode = new Integer(bc); 
-//	            } catch (NumberFormatException e) {
-//	            	LOG.fine(BRANCH_CODE+" "+value + " is not numeric.");
-//	            }        
-			}
-			else if(key.equals(ADDRESS)) bankData.setAddress(value);
-			else if(key.equals(STATE)) bankData.setState(value);
-			else if(key.equals(ZIP)) bankData.setZipString((String)value);
-			else if(key.equals(PHONE)) bankData.setPhone(value);
-			else if(key.equals(FAX)) bankData.setFax(value);
-			else if(key.equals(WWW)) bankData.setWww(value);
-			else if(key.equals(EMAIL)) bankData.setEmail(value);
-			else {
-				LOG.severe("unsupported key "+key);
-			}
-		}
-		return bankData;	
-	}
-
 	private SepaData parseSepaDataObject(JSONObject sepa_data) {
 		SepaData sepaData = new SepaData();
 		sepaData.setSCT((String)sepa_data.get("SCT"));
@@ -311,9 +284,7 @@ public class IbanToBankData implements IbanBankData {
 
 	private BankData getBankData() {
 		BankData bankData = new BankData();
-//		SepaData sepaData = new SepaData();
 		String countryCode = iban.substring(0, 2);
-//		String bban = iban.substring(4);
 		if(Bban.BBAN.get(countryCode)!=null) {
 			Bban bData = Bban.BBAN.get(countryCode); // liefert eine Instanz mit Methode
 			bankData = bData.getBankData(iban);
