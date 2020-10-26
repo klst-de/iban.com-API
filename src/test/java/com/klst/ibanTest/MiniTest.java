@@ -29,30 +29,31 @@ public class MiniTest {
 	static LogManager logManager = LogManager.getLogManager(); // Singleton
 	
 	static {
-//        URL url = MiniTest.class.getClassLoader().getResource("testLogging.properties");
-//		try {
-//	        File file = new File(url.toURI());
-//			logManager.readConfiguration(new FileInputStream(file));
-//		} catch (IOException | URISyntaxException e) {
-//			LOG = Logger.getLogger(MiniTest.class.getName());
-//			LOG.warning(e.getMessage());
-//		}
-//		LOG = Logger.getLogger(MiniTest.class.getName());
-	}
-	
-    @BeforeClass
-	public static void staticSetup() {
-    	URL url = MiniTest.class.getClassLoader().getResource("testLogging.properties");
+        URL url = MiniTest.class.getClassLoader().getResource("testLogging.properties");
 		try {
-			File file = new File(url.toURI());
+	        File file = new File(url.toURI());
 			logManager.readConfiguration(new FileInputStream(file));
-// Facility specific log properties funktionieren nicht bei FileInputStream(String name)
-//			logManager.readConfiguration(new FileInputStream(RESOURCE_PATH + "testLogging.properties"));
 		} catch (IOException | URISyntaxException e) {
 			LOG = Logger.getLogger(MiniTest.class.getName());
 			LOG.warning(e.getMessage());
 		}
 		LOG = Logger.getLogger(MiniTest.class.getName());
+	}
+	
+    @BeforeClass
+	public static void staticSetup() {
+//    	URL url = MiniTest.class.getClassLoader().getResource("testLogging.properties");
+//		try {
+//			File file = new File(url.toURI());
+//			logManager.readConfiguration(new FileInputStream(file));
+// Facility specific log properties funktionieren nicht bei FileInputStream(String name)
+//			logManager.readConfiguration(new FileInputStream(RESOURCE_PATH + "testLogging.properties"));
+//		} catch (IOException | URISyntaxException e) {
+//			LOG = Logger.getLogger(MiniTest.class.getName());
+//			LOG.warning(e.getMessage());
+//		}
+//		LOG = Logger.getLogger(MiniTest.class.getName());
+    	LOG.config("staticSetup fertig");
 	}
     
 	@Before 
