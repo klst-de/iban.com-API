@@ -244,6 +244,7 @@ public class IbanToBankData implements IbanBankData {
 	}
 
 	BankData parseBankDataObject(JSONObject bank_data) {
+		LOG.config(bank_data.toString());
 		BankData bankData = new BankData();
 		// mandatory props:
 		bankData.setBic((String)bank_data.get(BIC));

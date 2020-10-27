@@ -759,8 +759,7 @@ public class Result {
     	}
 
         public String toString() {
-    		StringBuffer sb = new StringBuffer("[CountryIso:").append(this.getCountryIso())
-    				.append(", Bic:").append(this.getBic())
+    		StringBuffer sb = new StringBuffer("[Bic:").append(this.getBic())
     				.append(", BankCode:").append(getBankCode()==0 ? getBankIdentifier() : getBankCode())
 //    				.append(", BankIdentifier:").append(this.getBankIdentifier())
     				.append(", BranchCode:").append(this.getBranchCode());
