@@ -119,8 +119,13 @@ public class MiniTest {
  */
     	LOG.info("LY bankData:"+bankData);
     	assertEquals(2, bankData.getBankCode());
+    	assertEquals("002", bankData.getBankIdentifier());
     	assertEquals("048", bankData.getBranchCode());
     	
+    	bankData = ibanToBankData.retrieveBankData("BE88000000004141");
+    	LOG.info("BE bankData:"+bankData);
+    	assertEquals(0, bankData.getBankCode());
+    	assertEquals("000", bankData.getBankIdentifier());
     }
 
 }
