@@ -1,6 +1,7 @@
 package com.klst.ibanTest;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import java.io.File;
@@ -126,6 +127,17 @@ public class MiniTest {
     	LOG.info("BE bankData:"+bankData);
     	assertEquals(0, bankData.getBankCode());
     	assertEquals("000", bankData.getBankIdentifier());
+        
+    	// "Volksbank Süd-Emsland -alt-", Emsbüren
+    	bankData = ibanToBankData.retrieveBankData("DE89266619120532013000"); // ohne Bic
+    	LOG.info("DE bankData:"+bankData);
+    	assertEquals(0, bankData.getBankSupports());
+    	// "SEB", Recklinghausen mit BIC.branch_code
+    	bankData = ibanToBankData.retrieveBankData("DE89426101120532013000"); // warn code:201 , code:202
+    	LOG.info("DE bankData:"+bankData);
+    	assertEquals(42610112, bankData.getBankCode());
+    	assertEquals("42610112", bankData.getBankIdentifier());
+    	assertEquals("ESSEDE5F426", bankData.getBic());
     }
 
 }
