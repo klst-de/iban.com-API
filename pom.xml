@@ -18,7 +18,27 @@
 					<target>1.8</target>
 				</configuration>
 			</plugin>
-			<plugin>
+			
+            <!-- Make this jar executable -->
+            <plugin>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.2.0</version>
+                <configuration>
+                  <!-- DO NOT include log4j.properties file in your Jar -->
+                  <excludes>
+                    <exclude>**/log4j.properties</exclude>
+                  </excludes>
+                  <archive>
+                    <!-- Jar file entry point -->
+                    <manifest>
+                        <mainClass>com.klst.iban.Demo</mainClass>
+                    </manifest>
+                  </archive>
+                </configuration>
+            </plugin>
+
+           <!-- Make fat executable jar with-dependencies -->
+ 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
 				<configuration>
 					<archive>
