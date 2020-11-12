@@ -48,3 +48,19 @@ There are 5 SEPA support schemes:
 The code depends to the following jars:
 * json-simple-1.1.jar
 * commons-validator-1.7.jar
+
+## cmdline demo
+
+* download the executable jar-with-dependencies 
+* start it:
+
+```json
+C:\proj>java -jar iban-to-bankdata-1.1.0-jar-with-dependencies.jar
+Enter iban.com API key : <your API_KEY>
+Enter iban : FI5542345670000081
+iban FI5542345670000081
+bank data [Bic:"ITELFIHHXXX", BankCode:423456, BranchCode:, Name:"SAVINGS BANK FINLAND", Address:"HEVOSENKENKA 3", BankSupports:7, Zip:"02600", City:"ESPOO"]
+
+Enter iban :
+Exit!
+```
