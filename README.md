@@ -28,7 +28,7 @@ support_codes :7
 
 ## API_KEY
 
-You need a key to use the [iban.com/validation-api](https://www.iban.com/validation-api)
+You need a key to use the [iban.com/validation-api](https://www.iban.com/validation-api). Of course, you can use a browser for a single validation. The intent of [this jar](https://github.com/klst-de/iban.com-API/releases/latest) is to integrate it in an application.
 
 ## SEPA support_codes
 
@@ -51,7 +51,7 @@ The code depends to the following jars:
 
 ## cmdline demo
 
-* download the executable jar-with-dependencies 
+* download the executable [jar-with-dependencies](https://github.com/klst-de/iban.com-API/releases/latest)
 * start it:
 
 ```json
