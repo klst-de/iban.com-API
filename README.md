@@ -26,6 +26,8 @@ address : 2 AV DE MONTE CARLO
 support_codes :7
 ```
 
+With the BIC/swift_code you can query the parent of the Monaco bank. It is [Edmond de Rothschild (Suisse) S.A.](https://search.gleif.org/#/record/52990049YMGDGTAMFX97) from Geneva.
+
 ## API_KEY
 
 You need a key to use the [iban.com/validation-api](https://www.iban.com/validation-api). Of course, you can use a browser for a single validation. The intent of [this jar](https://github.com/klst-de/iban.com-API/releases/latest) is to integrate it in an application.
